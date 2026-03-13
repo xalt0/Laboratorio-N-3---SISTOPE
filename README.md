@@ -1,13 +1,15 @@
-# José Antonio Muñoz Álvarez - 21.154.079-6
-
 # Simulador Concurrente de Memoria Virtual
 
-Simulador de segmentación y paginación con pthreads. Laboratorio 3 - Sistemas Operativos 2/2025.
+Simulador de segmentación y paginación con múltiples threads POSIX (pthreads).
+Implementa traducción de direcciones virtuales a físicas, TLB con política FIFO,
+page faults con eviction FIFO, y modos SAFE/UNSAFE para observar concurrencia.
+
+Laboratorio 3 - Sistemas Operativos 2/2025.
 
 ## Requisitos
 
-- `gcc` con soporte C11
-- `pthreads` (disponible en Linux)
+- Compilador C con soporte C11 (`gcc` >= 7.x recomendado)
+- Biblioteca `pthreads` (disponible por defecto en Linux y macOS)
 
 ## Compilación
 
@@ -21,42 +23,31 @@ make
 make run
 ```
 
-O manualmente:
+Ejecuta un ejemplo por defecto en modo paginación con 2 threads.
 
-```bash
-./simulator --mode <seg|page> [opciones] --stats
-```
-
-## Flags disponibles
-
-| Flag | Default | Descripción |
-|------|---------|-------------|
-| `--mode seg\|page` | — | Modo (obligatorio) |
-| `--threads INT` | 1 | Número de threads |
-| `--ops-per-thread INT` | 1000 | Operaciones por thread |
-| `--workload uniform\|80-20` | uniform | Patrón de acceso |
-| `--seed INT` | 42 | Semilla aleatoria |
-| `--unsafe` | — | Sin locks |
-| `--stats` | — | Mostrar reporte |
-| `--segments INT` | 4 | Segmentos (modo seg) |
-| `--seg-limits CSV` | 4096,… | Límites por segmento |
-| `--pages INT` | 64 | Páginas virtuales (modo page) |
-| `--frames INT` | 32 | Frames físicos globales |
-| `--page-size INT` | 4096 | Tamaño de página en bytes |
-| `--tlb-size INT` | 16 | Entradas TLB (0=desactivada) |
-| `--tlb-policy fifo` | fifo | Política TLB |
-| `--evict-policy fifo` | fifo | Política eviction |
-
-## Reproducir experimentos
+## Reproducción de experimentos
 
 ```bash
 make reproduce
 ```
 
-Genera los JSONs en `out/exp1.json`, `out/exp2a.json`, `out/exp2b.json`, `out/exp3a.json`, `out/exp3b.json`.
+Ejecuta los 3 experimentos obligatorios y guarda los resultados en `out/`.
 
-## Tests
+## Ejemplos de comandos
 
 ```bash
-make tests
+# Segmentación: 4 threads, workload uniform, mostrar stats
+./simulator --mode seg --threads 4 --workload uniform --ops-per-thread 5000 --stats
+
+# Paginación: 8 threads, TLB FIFO, eviction FIFO, modo UNSAFE
+./simulator --mode page --threads 8 --frames 16 --tlb-size 32 \
+            --tlb-policy fifo --evict-policy fifo --unsafe --stats
+
+# Paginación: experimento de thrashing
+./simulator --mode page --threads 8 --frames 4 --workload uniform \
+            --ops-per-thread 10000 --seed 123 --stats
+
+# Segmentación con límites personalizados
+./simulator --mode seg --threads 1 --segments 4 \
+            --seg-limits 1024,2048,4096,8192 --seed 100 --stats
 ```
