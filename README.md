@@ -1,3 +1,5 @@
+# José Antonio Muñoz Álvarez - 21.154.079-6
+
 # Simulador Concurrente de Memoria Virtual
 
 Simulador de segmentación y paginación con múltiples threads POSIX (pthreads).
@@ -8,8 +10,8 @@ Laboratorio 3 - Sistemas Operativos 2/2025.
 
 ## Requisitos
 
-- Compilador C con soporte C11 (`gcc` >= 7.x recomendado)
-- Biblioteca `pthreads` (disponible por defecto en Linux y macOS)
+- Compilador C con soporte C11 (`gcc`)
+- Biblioteca `pthreads` (disponible por defecto en Linux)
 
 ## Compilación
 
@@ -31,7 +33,7 @@ Ejecuta un ejemplo por defecto en modo paginación con 2 threads.
 make reproduce
 ```
 
-Ejecuta los 3 experimentos obligatorios y guarda los resultados en `out/`.
+Ejecuta los 3 experimentos y guarda los resultados en `out/`.
 
 ## Ejemplos de comandos
 
